@@ -4,4 +4,7 @@
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="signup_text">Not yet registered? Signup Now</string>
+    <string name="register_text">Signup</string>
+    <string name="username_hint">Name</string>
+    <string name="confirm_password_hint">Confirm Password</string>
 </resources>
