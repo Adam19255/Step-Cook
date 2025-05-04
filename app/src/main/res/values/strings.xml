@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Step-Cook</string>
+    <string name="login_text">Login</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="signup_text">Not yet registered? Signup Now</string>
+</resources>
