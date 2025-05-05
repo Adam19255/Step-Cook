@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/login_background"
-    tools:context=".Register">
+    tools:context=".RegisterActivity">
 
     <View
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                 android:id="@+id/userName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/custom_login_container"
                 android:drawableStart="@drawable/user_alt_1_svgrepo_com"
                 android:drawablePadding="8dp"
@@ -58,7 +58,7 @@
                 android:id="@+id/userEmail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/custom_login_container"
                 android:drawableStart="@drawable/baseline_alternate_email_24"
                 android:drawablePadding="8dp"
@@ -98,12 +98,11 @@
 
 
             <Button
-                android:id="@+id/loginButton"
+                android:id="@+id/signupButton"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/orange"
-                android:onClick="register"
                 android:text="@string/register_text"
                 android:textSize="18sp" />
 
