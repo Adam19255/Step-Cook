@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signupRedirect;
 
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         signupRedirect = findViewById(R.id.signupRedirect);
 
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,16 +49,24 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 auth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                FirebaseUser user = auth.getCurrentUser();
-                                Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                        .addOnSuccessListener(authResult -> {
+                            String uid = auth.getCurrentUser().getUid();
+                            db.collection("Users").document(uid).get()
+                                    .addOnSuccessListener(documentSnapshot -> {
+                                        if (documentSnapshot.exists()) {
+                                            String name = documentSnapshot.getString("userName");
+                                            Toast.makeText(LoginActivity.this, "Welcome " + name + "!", Toast.LENGTH_LONG).show();
 
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                            }
+                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                             finish();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(LoginActivity.this, "Welcome! (name not found)", Toast.LENGTH_LONG).show();
+                                    });
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(LoginActivity.this, "Login failed, incorrect email or password.", Toast.LENGTH_LONG).show();
                         });
             }
         });
