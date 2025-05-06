@@ -3,7 +3,8 @@ package com.project.step_cook;
 public class Recipe {
     private String id;
     private String title;
-    private int cookTime;
+
+    private int cookTime; // Cook time in seconds
     private String imageUrl;
     public Recipe() {}
     public Recipe(String id, String title, String description, int cookTimeSeconds, String imageUrl) {
