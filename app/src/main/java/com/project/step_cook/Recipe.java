@@ -12,4 +12,31 @@ public class Recipe {
         this.cookTime = cookTimeSeconds;
         this.imageUrl = imageUrl;
     }
+
+    public String getId() {
+        return id;
+    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public int getCookTime() {
+        return cookTime;
+    }
+
+    public void setCookTime(int cookTime) {
+        this.cookTime = cookTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
