@@ -15,11 +15,40 @@
         android:background="@drawable/main_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- Filter Icon - Top Left -->
+    <ImageButton
+        android:id="@+id/filterButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="100dp"
+        android:background="@null"
+        android:contentDescription="@string/filter"
+        android:scaleType="fitCenter"
+        android:src="@drawable/filter_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Circular Add Button -->
+    <!-- Settings Icon - Top Right -->
+    <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:contentDescription="@string/settings"
+        android:scaleType="fitCenter"
+        android:src="@drawable/setting_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Circular Add Button -->
     <ImageButton
         android:id="@+id/addButton"
         android:layout_width="72dp"
@@ -35,21 +64,9 @@
         app:layout_constraintHorizontal_bias="0.952"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/floatingActionButton2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginBottom="32dp"-->
-<!--        android:clickable="true"-->
-<!--        android:src="@drawable/add_circle"-->
-<!--        android:width="24dp"-->
-<!--        android:height="24dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/view"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.915"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
-
+    <!-- Recipe List -->
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recipeRecyclerView"
         android:layout_width="350dp"
         android:layout_height="520dp"
         app:layout_constraintBottom_toBottomOf="@+id/view"
@@ -57,10 +74,9 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintVertical_bias="0.727">
+        app:layout_constraintVertical_bias="0.727" />
 
-    </androidx.recyclerview.widget.RecyclerView>
-
+    <!-- Top Guide -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
