@@ -1,8 +1,12 @@
 package com.project.step_cook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -10,32 +14,36 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageButton filterButton, settingsButton;
+    private ImageView settingsButton;
+    private Button difficultyFilter;
+    private Button favoriteFilter;
+    private Button cookTimeFilter;
+    private ImageView addRecipeButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        filterButton = findViewById(R.id.filterButton);
         settingsButton = findViewById(R.id.settingsButton);
+        difficultyFilter = findViewById(R.id.difficultyFilter);
+        favoriteFilter = findViewById(R.id.favoriteFilter);
+        cookTimeFilter = findViewById(R.id.cookTimeFilter);
+        addRecipeButton = findViewById(R.id.addRecipeButton);
 
-        filterButton.setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(MainActivity.this, v);
-            popup.getMenu().add(0, 1, 0, "Filter by Date");
-            popup.getMenu().add(0, 2, 1, "Favorites Only");
-            popup.getMenu().add(0, 3, 2, "By Recipe Type");
-
-            popup.setOnMenuItemClickListener(item -> {
-                Toast.makeText(MainActivity.this, "Selected: " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                return true;
-            });
-
-            popup.show();
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
         });
 
-        settingsButton.setOnClickListener(v ->
-                Toast.makeText(this, "Settings button clicked", Toast.LENGTH_SHORT).show()
-        );
-    }
+        addRecipeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, AddRecipeActivity.class));
+            }
+        });
+        }
 }

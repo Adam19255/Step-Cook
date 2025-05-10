@@ -10,6 +10,7 @@
     <string name="add_recipe">Add Recipe</string>
     <string name="settings">Settings</string>
     <string name="filter">Filter</string>
-
-
+    <string name="difficulty_filter">Difficulty</string>
+    <string name="favorite_filter">Favorites</string>
+    <string name="cook_time_filter">Cook Time</string>
 </resources>
