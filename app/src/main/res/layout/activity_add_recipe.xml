@@ -7,13 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".AddRecipeActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_recipe"
+    <EditText
+        android:id="@+id/test"
+        android:layout_width="356dp"
+        android:layout_height="46dp"
+        android:background="@drawable/custom_input"
+        android:drawablePadding="8dp"
+        android:hint="custom input"
+        android:inputType="textEmailAddress"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textColorHighlight="@color/cardview_dark_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

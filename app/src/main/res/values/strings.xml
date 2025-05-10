@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Step-Cook</string>
+    <string name="logo">logo</string>
     <string name="login_text">Login</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
@@ -13,4 +14,5 @@
     <string name="difficulty_filter">Difficulty</string>
     <string name="favorite_filter">Favorites</string>
     <string name="cook_time_filter">Cook Time</string>
+    <string name="search">Search</string>
 </resources>

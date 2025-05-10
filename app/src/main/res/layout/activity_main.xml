@@ -5,78 +5,121 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/main_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".MainActivity">
 
     <!-- Settings Icon - Top Right -->
-    <ImageView
-        android:id="@+id/settingsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:contentDescription="@string/settings"
-        android:src="@drawable/settings_svgrepo_com"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Filters -->
-    <Button
-        android:id="@+id/difficultyFilter"
-        android:layout_width="120dp"
-        android:layout_height="45dp"
-        android:backgroundTint="@color/filter"
-        android:text="@string/difficulty_filter"
-        android:textColor="@color/black"
-        android:textSize="13sp"
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="160dp"
+        android:layout_height="107dp"
+        android:contentDescription="@string/logo"
+        android:src="@drawable/app_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.14" />
+        app:layout_constraintVertical_bias="0.005" />
+
+    <EditText
+        android:id="@+id/searchInput"
+        android:layout_width="370dp"
+        android:layout_height="48dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/custom_search_icon"
+        android:drawablePadding="8dp"
+        android:hint="@string/search"
+        android:inputType="textEmailAddress"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textColorHighlight="@color/cardview_dark_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appLogo"
+        app:layout_constraintVertical_bias="0.015" />
+
+    <!-- Filters -->
+
+    <!-- Add button -->
+
+    <ImageView
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/settings"
+        android:src="@drawable/settings_svg"
+        app:layout_constraintBottom_toTopOf="@+id/searchInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.861"
+        app:layout_constraintStart_toEndOf="@+id/appLogo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/difficultyFilter"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/gray"
+        android:text="@string/difficulty_filter"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/favoriteFilter"
+        app:layout_constraintHorizontal_bias="0.60"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchInput"
+        app:layout_constraintVertical_bias="0.02" />
 
     <Button
         android:id="@+id/favoriteFilter"
         android:layout_width="120dp"
-        android:layout_height="45dp"
-        android:backgroundTint="@color/filter"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/gray"
         android:text="@string/favorite_filter"
         android:textColor="@color/black"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/cookTimeFilter"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.14" />
+        app:layout_constraintTop_toBottomOf="@+id/searchInput"
+        app:layout_constraintVertical_bias="0.02" />
 
     <Button
         android:id="@+id/cookTimeFilter"
         android:layout_width="120dp"
-        android:layout_height="45dp"
-        android:backgroundTint="@color/filter"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/gray"
         android:text="@string/cook_time_filter"
         android:textColor="@color/black"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.96"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.14" />
+        app:layout_constraintTop_toBottomOf="@+id/searchInput"
+        app:layout_constraintVertical_bias="0.02" />
 
-    <!-- Add button -->
-    <ImageView
-        android:id="@+id/addRecipeButton"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+    <FrameLayout
+        android:id="@+id/addButtonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:contentDescription="@string/add_recipe"
-        android:src="@drawable/add_circle_svgrepo_com"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/addRecipeButton"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:contentDescription="@string/add_recipe"
+            android:src="@drawable/add_circle_svg" />
+    </FrameLayout>
 
     <!-- Recipe List -->
 
@@ -85,14 +128,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipeRecyclerView"
         android:layout_width="350dp"
-        android:layout_height="520dp"
-        android:layout_marginTop="120dp"
+        android:layout_height="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.23" />
+        app:layout_constraintTop_toBottomOf="@+id/favoriteFilter"
+        app:layout_constraintVertical_bias="0.123" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
