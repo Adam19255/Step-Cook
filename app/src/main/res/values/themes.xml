@@ -11,4 +11,16 @@
         <item name="android:windowEnterAnimation">@anim/slide_in_animation</item>
         <item name="android:windowExitAnimation">@anim/slide_out_animation</item>
     </style>
+
+    <style name="notificationSwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/notifications</item>
+        <item name="colorSwitchThumbNormal">@color/white</item>
+        <item name="android:colorForeground">#909090</item>
+    </style>
+
+    <style name="nextStepSwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/next_step</item>
+        <item name="colorSwitchThumbNormal">@color/white</item>
+        <item name="android:colorForeground">#909090</item>
+    </style>
 </resources>

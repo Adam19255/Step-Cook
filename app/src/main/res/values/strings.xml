@@ -16,9 +16,16 @@
     <string name="confirm_password_hint">Confirm Password</string>
     <string name="add_recipe">Add Recipe</string>
     <string name="popup">Popup Menu</string>
-    <string name="about">About</string>
+    <string name="about">About Us</string>
     <string name="exit">Exit</string>
     <string name="settings">Settings</string>
+    <string name="back_button">Back Button</string>
+    <string name="settings_logo">Settings Logo</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="notifications">Notifications</string>
+    <string name="next_step">Auto play next step</string>
+    <string name="logout">Log Out</string>
+    <string name="right_arrow">Right Arrow</string>
     <string name="filter">Filter</string>
     <string name="difficulty_filter">Difficulty</string>
     <string name="show_all">Show all</string>
