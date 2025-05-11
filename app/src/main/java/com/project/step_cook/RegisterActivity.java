@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText userPassword;
     private EditText confirmPassword;
     private Button signupButton;
+    private ImageView backButton;
 
     private FirebaseAuth auth;
 
@@ -38,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.userPassword);
         confirmPassword = findViewById(R.id.confirmPassword);
         signupButton = findViewById(R.id.signupButton);
+        backButton = findViewById(R.id.backButton);
 
         auth = FirebaseAuth.getInstance();
 
@@ -58,6 +61,14 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     registerUser(txt_user, txt_email, txt_pass);
                 }
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish();
             }
         });
     }
