@@ -20,8 +20,10 @@
     <string name="exit">Exit</string>
     <string name="settings">Settings</string>
     <string name="back_button">Back Button</string>
-    <string name="settings_logo">Settings Logo</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="settings_logo">Settings Logo</string>
+    <string name="new_recipe_title">New Recipe Title</string>
+    <string name="step_description">Step Description</string>
     <string name="notifications">Notifications</string>
     <string name="next_step">Auto play next step</string>
     <string name="logout">Log Out</string>
@@ -39,4 +41,6 @@
     <string name="long_cook_time">More than 60 minutes</string>
     <string name="search">Search</string>
     <string name="hide">Hide button</string>
+    <string name="timer_icon">Set Timer</string>
+    <string name="remove_step">Remove Step</string>
 </resources>

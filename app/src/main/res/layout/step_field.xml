@@ -1,6 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageButton
+        android:id="@+id/timerIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/timer"
+        android:layout_marginEnd="8dp"
+        android:layout_gravity="center_vertical"
+        android:onClick="clickTimer"
+        android:contentDescription="@string/timer_icon" />
+
+    <EditText
+        android:id="@+id/stepDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="@string/step_description"
+        android:inputType="textCapSentences"
+        android:autofillHints="username"
+        android:background="@android:color/white"
+        android:padding="6dp" />
+
+    <ImageButton
+        android:id="@+id/removeStepButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/minus_svg"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/remove_step"
+        android:layout_gravity="center_vertical" />
+</LinearLayout>
