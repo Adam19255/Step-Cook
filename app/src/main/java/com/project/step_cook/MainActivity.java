@@ -1,6 +1,7 @@
 package com.project.step_cook;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private String selectedDifficulty = "All"; // Default option
     private String selectedCookTime = "All";
     private boolean isFavoriteFilterActive = false;
+    private final String DIFFICULTY_FILTER = "difficultyFilter";
+    private final String COOK_TIME_FILTER = "cookTimeFilter";
 
 
     @Override
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         difficultyFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                changeButtonColor(true, difficultyFilter);
                 showDifficultyDialog();
             }
         });
@@ -74,22 +78,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Toggle the state
                 isFavoriteFilterActive = !isFavoriteFilterActive;
-
                 // Change the color based on the state
-                if (isFavoriteFilterActive) {
-                    // Change to orange when active - use MainActivity.this instead of just this
-                    favoriteFilter.setBackgroundTintList(ColorStateList.valueOf(
-                            ContextCompat.getColor(MainActivity.this, R.color.orange)));
-                    favoriteFilter.setTextColor(ContextCompat.getColor(
-                            MainActivity.this, android.R.color.white));
-                } else {
-                    // Change back to gray when inactive
-                    favoriteFilter.setBackgroundTintList(ColorStateList.valueOf(
-                            ContextCompat.getColor(MainActivity.this, R.color.gray)));
-                    favoriteFilter.setTextColor(ContextCompat.getColor(
-                            MainActivity.this, R.color.black));
-                }
-
+                changeButtonColor(isFavoriteFilterActive, favoriteFilter);
                 Toast.makeText(MainActivity.this,
                         isFavoriteFilterActive ? "Favorites filter activated" : "Favorites filter deactivated",
                         Toast.LENGTH_SHORT).show();
@@ -101,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         cookTimeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                changeButtonColor(true, cookTimeFilter);
                 showCookTimeDialog();
             }
         });
@@ -137,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView closeDialog = difficultyDialog.findViewById(R.id.closeDialog);
 
         // Highlight the currently selected difficulty
-        highlightSelectedDifficulty(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty);
+        highlightSelectedFilter(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty, DIFFICULTY_FILTER);
 
         allDifficulties.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,12 +136,13 @@ public class MainActivity extends AppCompatActivity {
                 selectedDifficulty = "All";
 
                 // Update the highlight
-                highlightSelectedDifficulty(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty);
+                highlightSelectedFilter(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty, DIFFICULTY_FILTER);
 
                 // Apply the filter immediately
                 applyDifficultyFilter(selectedDifficulty);
 
                 difficultyDialog.dismiss();
+                changeButtonColor(false, difficultyFilter);
                 Toast.makeText(MainActivity.this, "All difficulties clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -159,14 +151,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectedDifficulty = "Easy";
-
-                // Update the highlight
-                highlightSelectedDifficulty(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty);
-
-                // Apply the filter immediately
+                highlightSelectedFilter(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty, DIFFICULTY_FILTER);
                 applyDifficultyFilter(selectedDifficulty);
-
                 difficultyDialog.dismiss();
+                changeButtonColor(false, difficultyFilter);
                 Toast.makeText(MainActivity.this, "Easy difficulty clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -175,14 +163,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectedDifficulty = "Medium";
-
-                // Update the highlight
-                highlightSelectedDifficulty(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty);
-
-                // Apply the filter immediately
+                highlightSelectedFilter(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty, DIFFICULTY_FILTER);
                 applyDifficultyFilter(selectedDifficulty);
-
                 difficultyDialog.dismiss();
+                changeButtonColor(false, difficultyFilter);
                 Toast.makeText(MainActivity.this, "Medium difficulty clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -191,14 +175,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectedDifficulty = "Hard";
-
-                // Update the highlight
-                highlightSelectedDifficulty(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty);
-
-                // Apply the filter immediately
+                highlightSelectedFilter(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty, DIFFICULTY_FILTER);
                 applyDifficultyFilter(selectedDifficulty);
-
                 difficultyDialog.dismiss();
+                changeButtonColor(false, difficultyFilter);
                 Toast.makeText(MainActivity.this, "Hard difficulty clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -207,6 +187,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 difficultyDialog.dismiss();
+                changeButtonColor(false, difficultyFilter);
+            }
+        });
+
+        difficultyDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // Reset button color when dialog is dismissed by clicking outside
+                changeButtonColor(false, difficultyFilter);
             }
         });
 
@@ -214,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showCookTimeDialog(){
-        // If we already have a dialog, just show it if not showing
         if (cookTimeDialog != null) {
             if (!cookTimeDialog.isShowing()) {
                 cookTimeDialog.show();
@@ -222,12 +210,10 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Create a new dialog if we don't have one
         cookTimeDialog = new Dialog(this);
         cookTimeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         cookTimeDialog.setContentView(R.layout.time_filter_layout);
-
-        // Set up dialog window properties
+        
         Window window = cookTimeDialog.getWindow();
         if (window != null) {
             window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -235,29 +221,23 @@ public class MainActivity extends AppCompatActivity {
             window.setBackgroundDrawableResource(android.R.color.transparent);
             window.setWindowAnimations(R.style.DialogAnimation);
         }
-
-        // Find UI elements
+        
         LinearLayout allCookTimes = cookTimeDialog.findViewById(R.id.allCookTimes);
         LinearLayout fastCookTime = cookTimeDialog.findViewById(R.id.fastCookTime);
         LinearLayout mediumCookTime = cookTimeDialog.findViewById(R.id.mediumCookTime);
         LinearLayout longCookTime = cookTimeDialog.findViewById(R.id.longCookTime);
         ImageView closeDialog = cookTimeDialog.findViewById(R.id.closeDialog);
-
-        // Highlight the currently selected difficulty
-        highlightSelectedCookTime(allCookTimes, fastCookTime, mediumCookTime, longCookTime);
+        
+        highlightSelectedFilter(allCookTimes, fastCookTime, mediumCookTime, longCookTime, COOK_TIME_FILTER);
 
         allCookTimes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectedCookTime = "All";
-
-                // Update the highlight
-                highlightSelectedCookTime(allCookTimes, fastCookTime, mediumCookTime, longCookTime);
-
-                // Apply the filter immediately
+                highlightSelectedFilter(allCookTimes, fastCookTime, mediumCookTime, longCookTime, COOK_TIME_FILTER);
                 applyCookTimeFilter(selectedCookTime);
-
                 cookTimeDialog.dismiss();
+                changeButtonColor(false, cookTimeFilter);
                 Toast.makeText(MainActivity.this, "All cook times clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -266,14 +246,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectedCookTime = "Fast";
-
-                // Update the highlight
-                highlightSelectedCookTime(allCookTimes, fastCookTime, mediumCookTime, longCookTime);
-
-                // Apply the filter immediately
+                highlightSelectedFilter(allCookTimes, fastCookTime, mediumCookTime, longCookTime, COOK_TIME_FILTER);
                 applyCookTimeFilter(selectedCookTime);
-
                 cookTimeDialog.dismiss();
+                changeButtonColor(false, cookTimeFilter);
                 Toast.makeText(MainActivity.this, "Fast cook time clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -282,14 +258,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectedCookTime = "Medium";
-
-                // Update the highlight
-                highlightSelectedCookTime(allCookTimes, fastCookTime, mediumCookTime, longCookTime);
-
-                // Apply the filter immediately
+                highlightSelectedFilter(allCookTimes, fastCookTime, mediumCookTime, longCookTime, COOK_TIME_FILTER);
                 applyCookTimeFilter(selectedCookTime);
-
                 cookTimeDialog.dismiss();
+                changeButtonColor(false, cookTimeFilter);
                 Toast.makeText(MainActivity.this, "Medium cook time clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -298,14 +270,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectedCookTime = "Long";
-
-                // Update the highlight
-                highlightSelectedCookTime(allCookTimes, fastCookTime, mediumCookTime, longCookTime);
-
-                // Apply the filter immediately
+                highlightSelectedFilter(allCookTimes, fastCookTime, mediumCookTime, longCookTime, COOK_TIME_FILTER);
                 applyCookTimeFilter(selectedCookTime);
-
                 cookTimeDialog.dismiss();
+                changeButtonColor(false, cookTimeFilter);
                 Toast.makeText(MainActivity.this, "Long cook time clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -314,6 +282,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 cookTimeDialog.dismiss();
+                changeButtonColor(false, cookTimeFilter);
+            }
+        });
+
+        cookTimeDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // Reset button color when dialog is dismissed by clicking outside
+                changeButtonColor(false, cookTimeFilter);
             }
         });
 
@@ -321,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Highlight the selected difficulty
-    private void highlightSelectedDifficulty(LinearLayout allLayout, LinearLayout easyLayout, LinearLayout mediumLayout, LinearLayout hardLayout) {
+    private void highlightSelectedFilter(LinearLayout allLayout, LinearLayout easyLayout, LinearLayout mediumLayout, LinearLayout hardLayout, String fromWhere) {
         // Reset all backgrounds first
         allLayout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
         easyLayout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
@@ -331,20 +308,40 @@ public class MainActivity extends AppCompatActivity {
         // Highlight the selected one
         LinearLayout selectedLayout = null;
 
-        switch (selectedDifficulty) {
-            case "All":
-                selectedLayout = allLayout;
-                break;
-            case "Easy":
-                selectedLayout = easyLayout;
-                break;
-            case "Medium":
-                selectedLayout = mediumLayout;
-                break;
-            case "Hard":
-                selectedLayout = hardLayout;
-                break;
+        if (fromWhere.equals("difficultyFilter")){
+            switch (selectedDifficulty) {
+                case "All":
+                    selectedLayout = allLayout;
+                    break;
+                case "Easy":
+                    selectedLayout = easyLayout;
+                    break;
+                case "Medium":
+                    selectedLayout = mediumLayout;
+                    break;
+                case "Hard":
+                    selectedLayout = hardLayout;
+                    break;
+            }
         }
+        
+        if (fromWhere.equals("cookTimeFilter")){
+            switch (selectedCookTime) {
+                case "All":
+                    selectedLayout = allLayout;
+                    break;
+                case "Fast":
+                    selectedLayout = easyLayout;
+                    break;
+                case "Medium":
+                    selectedLayout = mediumLayout;
+                    break;
+                case "Long":
+                    selectedLayout = hardLayout;
+                    break;
+            }
+        }
+        
 
         if (selectedLayout != null) {
             // Create a highlight background
@@ -354,37 +351,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Highlight the selected cook time
-    private void highlightSelectedCookTime(LinearLayout allLayout, LinearLayout fastLayout, LinearLayout mediumLayout, LinearLayout longLayout) {
-        // Reset all backgrounds first
-        allLayout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
-        fastLayout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
-        mediumLayout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
-        longLayout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
-
-        // Highlight the selected one
-        LinearLayout selectedLayout = null;
-
-        switch (selectedCookTime) {
-            case "All":
-                selectedLayout = allLayout;
-                break;
-            case "Fast":
-                selectedLayout = fastLayout;
-                break;
-            case "Medium":
-                selectedLayout = mediumLayout;
-                break;
-            case "Long":
-                selectedLayout = longLayout;
-                break;
-        }
-
-        if (selectedLayout != null) {
-            // Create a highlight background
-            int highlightColor = ContextCompat.getColor(this, R.color.orange);
-            highlightColor = Color.argb(50, Color.red(highlightColor), Color.green(highlightColor), Color.blue(highlightColor));
-            selectedLayout.setBackgroundColor(highlightColor);
+    private void changeButtonColor(boolean isClicked, Button filter){
+        if (isClicked){
+            filter.setBackgroundTintList(ColorStateList.valueOf(
+                    ContextCompat.getColor(MainActivity.this, R.color.orange)));
+            filter.setTextColor(ContextCompat.getColor(
+                    MainActivity.this, android.R.color.white));
+        } else {
+            // Change back to gray when inactive
+            filter.setBackgroundTintList(ColorStateList.valueOf(
+                    ContextCompat.getColor(MainActivity.this, R.color.gray)));
+            filter.setTextColor(ContextCompat.getColor(
+                    MainActivity.this, R.color.black));
         }
     }
 
