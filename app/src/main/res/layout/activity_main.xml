@@ -48,14 +48,14 @@
     <!-- Add button -->
 
     <ImageView
-        android:id="@+id/settingsButton"
+        android:id="@+id/popupMenuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/settings"
-        android:src="@drawable/settings_svg"
+        android:contentDescription="@string/popup"
+        android:src="@drawable/dots_svg"
         app:layout_constraintBottom_toTopOf="@+id/searchInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.861"
+        app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toEndOf="@+id/appLogo"
         app:layout_constraintTop_toTopOf="parent" />
 

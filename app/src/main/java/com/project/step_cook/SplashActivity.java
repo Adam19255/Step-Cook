@@ -2,18 +2,26 @@ package com.project.step_cook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
+
+    private static final int SPLASH_DURATION = 2;
+    private int timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        new Thread(() ->
-        {
+        new Thread(() -> {
+            timer = SPLASH_DURATION;
+            while(timer != 0){
+                SystemClock.sleep(1000);
+                timer--;
+            }
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             finish();
         }).start();

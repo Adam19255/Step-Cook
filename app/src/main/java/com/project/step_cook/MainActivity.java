@@ -20,9 +20,9 @@ import android.graphics.Color;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
-    private ImageView settingsButton;
+    private ImageView popupMenuButton;
     private EditText searchInput;
     private Button difficultyFilter;
     private Button favoriteFilter;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        settingsButton = findViewById(R.id.settingsButton);
+        popupMenuButton = findViewById(R.id.popupMenuButton);
         searchInput = findViewById(R.id.searchInput);
         difficultyFilter = findViewById(R.id.difficultyFilter);
         favoriteFilter = findViewById(R.id.favoriteFilter);
@@ -51,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         searchInput.clearFocus();
 
-        settingsButton.setOnClickListener(new View.OnClickListener() {
+        popupMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                showPopupMenu(view);
             }
         });
 
@@ -95,6 +95,33 @@ public class MainActivity extends AppCompatActivity {
                 showCookTimeDialog();
             }
         });
+    }
+
+    private void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.inflate(R.menu.popup_menu);
+        popupMenu.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_settings) {
+             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            return true;
+        } else if (id == R.id.menu_about) {
+            Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
+            // Start about activity
+            // startActivity(new Intent(MainActivity.this, AboutActivity.class));
+            return true;
+        } else if (id == R.id.menu_exit) {
+            showExitConfirmationDialog();
+            return true;
+        }
+
+        return false;
     }
 
     private void showDifficultyDialog(){
@@ -372,4 +399,30 @@ public class MainActivity extends AppCompatActivity {
     private void applyFavoriteFilter(){}
 
     private void applyCookTimeFilter(String cookTime){}
+
+    // Show confirmation dialog before exiting the app
+    private void showExitConfirmationDialog() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Exit App");
+        builder.setMessage("Are you sure you want to exit?");
+
+        // Add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked Yes button
+                finish(); // Close the app
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                dialog.dismiss();
+            }
+        });
+
+        // Create and show the AlertDialog
+        androidx.appcompat.app.AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }
