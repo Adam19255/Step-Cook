@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.StepCook" parent="Base.Theme.StepCook" />
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_animation</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_animation</item>
+    </style>
 </resources>
