@@ -50,4 +50,5 @@
     <string name="hide">Hide button</string>
     <string name="timer_icon">Set Timer</string>
     <string name="remove_step">Remove Step</string>
+    <string name="save_recipe">Save Recipe</string>
 </resources>

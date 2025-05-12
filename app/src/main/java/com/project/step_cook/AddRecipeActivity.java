@@ -8,20 +8,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
     private ImageView backButton;
+    private LinearLayout stepsContainer;
+    private LayoutInflater inflater;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
 
+        inflater = LayoutInflater.from(this); // <-- ADD THIS LINE
+
         backButton = findViewById(R.id.backButton);
+        stepsContainer = findViewById(R.id.stepsContainer);
+        ImageView addStepButton = findViewById(R.id.addStepButton);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,6 +41,11 @@ public class AddRecipeActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        addStepButton.setOnClickListener(view -> {
+            Toast.makeText(AddRecipeActivity.this, "Clicked on add step", Toast.LENGTH_LONG).show();
+            addNewStep();
+        });
     }
 
     // This method is triggered by the XML android:onClick="clickTimer"
@@ -37,6 +53,18 @@ public class AddRecipeActivity extends AppCompatActivity {
         // Handle the click event here
         Toast.makeText(this, "Timer icon clicked!", Toast.LENGTH_SHORT).show();
 
+
         // You can use view.getId() if you need to distinguish between multiple buttons
+    }
+
+    private void addNewStep() {
+        View stepView = inflater.inflate(R.layout.step_field, stepsContainer, false);
+
+
+        // Optionally add listener for remove button
+        ImageButton removeButton = stepView.findViewById(R.id.removeStepButton);
+        removeButton.setOnClickListener(v -> stepsContainer.removeView(stepView));
+
+        stepsContainer.addView(stepView);
     }
 }
