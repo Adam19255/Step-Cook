@@ -62,7 +62,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
 
         // Optionally add listener for remove button
-        ImageButton removeButton = stepView.findViewById(R.id.removeStepButton);
+        ImageView removeButton = stepView.findViewById(R.id.removeStepButton);
         removeButton.setOnClickListener(v -> stepsContainer.removeView(stepView));
 
         stepsContainer.addView(stepView);
