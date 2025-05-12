@@ -57,6 +57,7 @@
                 android:textSize="12sp"/>
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/editProfileButton"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
@@ -102,6 +103,7 @@
                         android:layout_marginStart="15dp"/>
 
                     <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/notificationSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -136,6 +138,7 @@
                         android:layout_marginStart="15dp"/>
 
                     <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/autoPlayNextStepSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -159,6 +162,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/aboutUsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -192,6 +196,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/logoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">

@@ -1,10 +1,16 @@
 package com.project.step_cook;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -14,10 +20,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Color;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
@@ -112,9 +120,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
              startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         } else if (id == R.id.menu_about) {
-            Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
-            // Start about activity
-            // startActivity(new Intent(MainActivity.this, AboutActivity.class));
+            showAboutDialog();
             return true;
         } else if (id == R.id.menu_exit) {
             showExitConfirmationDialog();
@@ -122,6 +128,60 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
 
         return false;
+    }
+
+    private void showAboutDialog() {
+        // Inflate the custom layout
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.about_us_dialog_layout, null);
+
+        // Get references to TextView fields
+        TextView appIdTextView = dialogView.findViewById(R.id.app_id);
+        TextView appVersionTextView = dialogView.findViewById(R.id.app_version);
+        TextView osInfoTextView = dialogView.findViewById(R.id.os_info);
+        AppCompatButton okButton = dialogView.findViewById(R.id.ok_button);
+
+        // Get application package name and version
+        String packageName = getApplicationContext().getPackageName();
+        String versionName = "1.0";
+
+        // Try to get the actual version name
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(packageName, 0);
+            versionName = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("SettingsActivity", "Package name not found", e);
+        }
+
+        // Get OS information
+        String osInfo = "Android " + Build.VERSION.RELEASE + " (API level " + Build.VERSION.SDK_INT + ")";
+
+        // Set values to TextViews
+        appIdTextView.setText(getString(R.string.application_id_format, packageName));
+        appVersionTextView.setText(getString(R.string.version_format, versionName));
+        osInfoTextView.setText(getString(R.string.os_info_format, osInfo));
+
+        // Create the Dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialog);
+        builder.setView(dialogView);
+
+        // Create and show the dialog
+        final AlertDialog dialog = builder.create();
+
+        // Set window animation and remove default background
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        // Set click listener for OK button
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void showDifficultyDialog(){
