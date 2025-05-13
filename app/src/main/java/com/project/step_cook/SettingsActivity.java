@@ -59,6 +59,13 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditProfileDialog();
+            }
+        });
+
         aboutUsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,6 +84,11 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void showEditProfileDialog() {
+        EditProfileDialog dialog = new EditProfileDialog(this);
+        dialog.show();
     }
 
     private void showAboutDialog() {

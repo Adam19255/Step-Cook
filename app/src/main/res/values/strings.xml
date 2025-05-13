@@ -9,6 +9,8 @@
     <string name="date">TBD</string>
     <string name="submission_with_date">Submission Date: TBD</string>
     <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="save">Save</string>
     <string name="application_id_format">Application ID: %s</string>
     <string name="version_format">Version: %s</string>
     <string name="os_info_format">OS Information: %s</string>
@@ -28,6 +30,10 @@
     <string name="settings">Settings</string>
     <string name="back_button">Back Button</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="edit_name">Edit Name</string>
+    <string name="change_password">Change Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
     <string name="settings_logo">Settings Logo</string>
     <string name="new_recipe_title">New Recipe Title</string>
     <string name="step_description">Step Description</string>
