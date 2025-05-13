@@ -21,8 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView signupRedirect;
 
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
+    private UserManager userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         signupRedirect = findViewById(R.id.signupRedirect);
 
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        userManager = UserManager.getInstance();
+
+        if (userManager.isUserLoggedIn()) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,26 +51,19 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                auth.signInWithEmailAndPassword(email, password)
-                        .addOnSuccessListener(authResult -> {
-                            String uid = auth.getCurrentUser().getUid();
-                            db.collection("Users").document(uid).get()
-                                    .addOnSuccessListener(documentSnapshot -> {
-                                        if (documentSnapshot.exists()) {
-                                            String name = documentSnapshot.getString("userName");
-                                            Toast.makeText(LoginActivity.this, "Welcome " + name + "!", Toast.LENGTH_LONG).show();
+                userManager.loginUser(email, password, new UserManager.UserDataCallback() {
+                    @Override
+                    public void onUserDataLoaded(User user) {
+                        Toast.makeText(LoginActivity.this, "Welcome " + user.getUserName() + "!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    }
 
-                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                             finish();
-                                        }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(LoginActivity.this, "Welcome! (name not found)", Toast.LENGTH_LONG).show();
-                                    });
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(LoginActivity.this, "Login failed, incorrect email or password.", Toast.LENGTH_LONG).show();
-                        });
+                    @Override
+                    public void onError(Exception e) {
+                        Toast.makeText(LoginActivity.this, "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 

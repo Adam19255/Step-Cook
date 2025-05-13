@@ -39,10 +39,8 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView userNameTextView;
     private TextView userEmailTextView;
 
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-    private String userId;
 
+    private UserManager userManager;
     private DialogManager dialogManager;
 
 
@@ -60,17 +58,11 @@ public class SettingsActivity extends AppCompatActivity {
         userNameTextView = findViewById(R.id.userNameTextView);
         userEmailTextView = findViewById(R.id.userEmailTextView);
 
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-
-        // Get current user
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            userId = currentUser.getUid();
-            loadUserData();
-        }
-
+        userManager = UserManager.getInstance();
         dialogManager = new DialogManager(this);
+
+        // Load user data
+        loadUserData();
 
         backButton.setOnClickListener(v -> finish());
 
@@ -89,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                auth.signOut();
+                userManager.logoutUser();
                 Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
                 // Clear the entire activity stack and make LoginActivity the new root
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -100,55 +92,55 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        DocumentReference userRef = db.collection("Users").document(userId);
-        userRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    // Set user info
-                    String userName = document.getString("userName");
-                    String email = document.getString("email");
-                    userNameTextView.setText(userName);
-                    userEmailTextView.setText(email);
+        // First check if we already have the user data cached
+        User currentUser = userManager.getCurrentUser();
 
-                    // Set switch states based on stored preferences
-                    Boolean notificationsEnabled = document.getBoolean("notificationsEnabled");
-                    Boolean autoPlayNextStep = document.getBoolean("autoPlayNextStep");
-
-                    // If preferences don't exist yet (for existing users before this feature), set defaults
-                    if (notificationsEnabled == null) notificationsEnabled = true;
-                    if (autoPlayNextStep == null) autoPlayNextStep = true;
-
-                    notificationSwitch.setChecked(notificationsEnabled);
-                    autoPlayNextStepSwitch.setChecked(autoPlayNextStep);
-                } else {
-                    Log.d(TAG, "No such document");
-                    Toast.makeText(SettingsActivity.this, "User data not found", Toast.LENGTH_SHORT).show();
+        if (currentUser != null) {
+            // Use cached user data
+            displayUserData(currentUser);
+        } else {
+            // Load user data from Firestore
+            userManager.loadUserData(new UserManager.UserDataCallback() {
+                @Override
+                public void onUserDataLoaded(User user) {
+                    displayUserData(user);
                 }
-            } else {
-                Log.d(TAG, "get failed with ", task.getException());
-                Toast.makeText(SettingsActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d(TAG, "Failed to load user data", e);
+                    Toast.makeText(SettingsActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void displayUserData(User user) {
+        userNameTextView.setText(user.getUserName());
+        userEmailTextView.setText(user.getEmail());
+        notificationSwitch.setChecked(user.isNotificationsEnabled());
+        autoPlayNextStepSwitch.setChecked(user.isAutoPlayNextStep());
     }
 
     private void updateUserPreference(String preferenceKey, boolean value) {
-        if (userId == null) return;
+        userManager.updateUserPreference(preferenceKey, value, new UserManager.UserOperationCallback() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "Preference " + preferenceKey + " updated successfully");
+            }
 
-        db.collection("Users").document(userId).update(preferenceKey, value)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Preference " + preferenceKey + " updated successfully");
-                })
-                .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error updating preference", e);
-                    Toast.makeText(SettingsActivity.this, "Failed to update setting", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onError(Exception e) {
+                Log.w(TAG, "Error updating preference", e);
+                Toast.makeText(SettingsActivity.this, "Failed to update setting", Toast.LENGTH_SHORT).show();
 
-                    // Revert the switch state if update fails
-                    if (preferenceKey.equals("notificationsEnabled")) {
-                        notificationSwitch.setChecked(!value);
-                    } else if (preferenceKey.equals("autoPlayNextStep")) {
-                        autoPlayNextStepSwitch.setChecked(!value);
-                    }
-                });
+                // Revert the switch state if update fails
+                if (preferenceKey.equals("notificationsEnabled")) {
+                    notificationSwitch.setChecked(!value);
+                } else if (preferenceKey.equals("autoPlayNextStep")) {
+                    autoPlayNextStepSwitch.setChecked(!value);
+                }
+            }
+        });
     }
 }

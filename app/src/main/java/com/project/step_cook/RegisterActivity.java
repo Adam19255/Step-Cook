@@ -28,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button signupButton;
     private ImageView backButton;
 
-    private FirebaseAuth auth;
+    private UserManager userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
         signupButton = findViewById(R.id.signupButton);
         backButton = findViewById(R.id.backButton);
 
-        auth = FirebaseAuth.getInstance();
+        userManager = UserManager.getInstance();
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +59,19 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (!txt_pass.equals(txt_confirm_pass)) {
                     Toast.makeText(RegisterActivity.this, "Passwords don't match.", Toast.LENGTH_LONG).show();
                 } else {
-                    registerUser(txt_user, txt_email, txt_pass);
+                    userManager.registerUser(txt_user, txt_email, txt_pass, new UserManager.UserOperationCallback() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(RegisterActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Toast.makeText(RegisterActivity.this, "Registration failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
         });
@@ -71,35 +83,4 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void registerUser(String userName, String email, String password) {
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                FirebaseUser firebaseUser = auth.getCurrentUser();
-                String userId = firebaseUser.getUid();
-
-                // Prepare user data
-                Map<String, Object> userData = new HashMap<>();
-                userData.put("userName", userName);
-                userData.put("email", email);
-                userData.put("notificationsEnabled", true);
-                userData.put("autoPlayNextStep", true);
-
-                // Save to Firestore
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Users").document(userId).set(userData)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(RegisterActivity.this, "User registered and data saved!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                            finish();
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(RegisterActivity.this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        });
-            } else {
-                Toast.makeText(RegisterActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
 }
