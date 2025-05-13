@@ -7,6 +7,9 @@
     android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:layoutDirection="ltr"
+    android:textDirection="ltr"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
     <!-- Settings Icon - Top Right -->
@@ -61,7 +64,7 @@
 
     <Button
         android:id="@+id/difficultyFilter"
-        android:layout_width="120dp"
+        android:layout_width="115dp"
         android:layout_height="48dp"
         android:backgroundTint="@color/gray"
         android:text="@string/difficulty_filter"
@@ -76,7 +79,7 @@
 
     <Button
         android:id="@+id/favoriteFilter"
-        android:layout_width="120dp"
+        android:layout_width="115dp"
         android:layout_height="48dp"
         android:backgroundTint="@color/gray"
         android:text="@string/favorite_filter"
@@ -91,7 +94,7 @@
 
     <Button
         android:id="@+id/cookTimeFilter"
-        android:layout_width="120dp"
+        android:layout_width="115dp"
         android:layout_height="48dp"
         android:backgroundTint="@color/gray"
         android:text="@string/cook_time_filter"
@@ -99,7 +102,7 @@
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchInput"
         app:layout_constraintVertical_bias="0.02" />

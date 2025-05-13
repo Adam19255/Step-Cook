@@ -9,6 +9,8 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/register_background"
+    android:layoutDirection="ltr"
+    android:textDirection="ltr"
     tools:context=".RegisterActivity">
     
     <LinearLayout
