@@ -36,6 +36,8 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
+    private DialogManager dialogManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,26 +54,13 @@ public class SettingsActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        dialogManager = new DialogManager(this);
 
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEditProfileDialog();
-            }
-        });
+        backButton.setOnClickListener(v -> finish());
 
-        aboutUsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAboutDialog();
-            }
-        });
+        editProfileButton.setOnClickListener(v -> dialogManager.showEditProfileDialog());
+
+        aboutUsButton.setOnClickListener(v -> dialogManager.showAboutDialog());
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,15 +73,5 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void showEditProfileDialog() {
-        EditProfileDialog dialog = new EditProfileDialog(this);
-        dialog.show();
-    }
-
-    private void showAboutDialog() {
-        AboutUsDialog dialog = new AboutUsDialog(this);
-        dialog.show();
     }
 }
