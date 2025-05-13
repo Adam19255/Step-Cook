@@ -82,6 +82,8 @@ public class RegisterActivity extends AppCompatActivity {
                 Map<String, Object> userData = new HashMap<>();
                 userData.put("userName", userName);
                 userData.put("email", email);
+                userData.put("notificationsEnabled", true);
+                userData.put("autoPlayNextStep", true);
 
                 // Save to Firestore
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
