@@ -6,11 +6,24 @@
     android:padding="24dp"
     android:background="@drawable/about_dialog_background">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="82dp"
-        android:contentDescription="@string/logo"
-        android:src="@drawable/edit_profile_logo" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/edit_profile_logo" />
+
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/close_svg"
+            android:contentDescription="@string/close_button"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -92,10 +105,9 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/save_button"
@@ -104,7 +116,9 @@
             android:background="@drawable/round_orange_button"
             android:text="@string/save"
             android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:layout_toStartOf="@+id/cancel_button"
+            android:layout_marginEnd="10dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel_button"
@@ -114,8 +128,8 @@
             android:text="@string/cancel_button"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:layout_marginStart="10dp" />
+            android:layout_alignParentEnd="true"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

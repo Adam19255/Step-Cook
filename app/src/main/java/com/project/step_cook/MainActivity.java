@@ -131,56 +131,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     private void showAboutDialog() {
-        // Inflate the custom layout
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.about_us_dialog_layout, null);
-
-        // Get references to TextView fields
-        TextView appIdTextView = dialogView.findViewById(R.id.app_id);
-        TextView appVersionTextView = dialogView.findViewById(R.id.app_version);
-        TextView osInfoTextView = dialogView.findViewById(R.id.os_info);
-        AppCompatButton okButton = dialogView.findViewById(R.id.ok_button);
-
-        // Get application package name and version
-        String packageName = getApplicationContext().getPackageName();
-        String versionName = "1.0";
-
-        // Try to get the actual version name
-        try {
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(packageName, 0);
-            versionName = packageInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e("SettingsActivity", "Package name not found", e);
-        }
-
-        // Get OS information
-        String osInfo = "Android " + Build.VERSION.RELEASE + " (API level " + Build.VERSION.SDK_INT + ")";
-
-        // Set values to TextViews
-        appIdTextView.setText(getString(R.string.application_id_format, packageName));
-        appVersionTextView.setText(getString(R.string.version_format, versionName));
-        osInfoTextView.setText(getString(R.string.os_info_format, osInfo));
-
-        // Create the Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialog);
-        builder.setView(dialogView);
-
-        // Create and show the dialog
-        final AlertDialog dialog = builder.create();
-
-        // Set window animation and remove default background
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
-
-        // Set click listener for OK button
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
+        AboutUsDialog dialog = new AboutUsDialog(this);
         dialog.show();
     }
 
@@ -213,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         LinearLayout mediumDifficulty = difficultyDialog.findViewById(R.id.mediumDifficulty);
         LinearLayout hardDifficulty = difficultyDialog.findViewById(R.id.hardDifficulty);
         ImageView closeDialog = difficultyDialog.findViewById(R.id.closeDialog);
+        ImageView closeButton = difficultyDialog.findViewById(R.id.closeButton);
 
         // Highlight the currently selected difficulty
         highlightSelectedFilter(allDifficulties, easyDifficulty, mediumDifficulty, hardDifficulty, DIFFICULTY_FILTER);
@@ -278,6 +230,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         });
 
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                difficultyDialog.dismiss();
+                changeButtonColor(false, difficultyFilter);
+            }
+        });
+
         difficultyDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -314,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         LinearLayout mediumCookTime = cookTimeDialog.findViewById(R.id.mediumCookTime);
         LinearLayout longCookTime = cookTimeDialog.findViewById(R.id.longCookTime);
         ImageView closeDialog = cookTimeDialog.findViewById(R.id.closeDialog);
+        ImageView closeButton = cookTimeDialog.findViewById(R.id.closeButton);
         
         highlightSelectedFilter(allCookTimes, fastCookTime, mediumCookTime, longCookTime, COOK_TIME_FILTER);
 
@@ -366,6 +327,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         });
 
         closeDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cookTimeDialog.dismiss();
+                changeButtonColor(false, cookTimeFilter);
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cookTimeDialog.dismiss();
@@ -429,7 +398,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         }
         
-
         if (selectedLayout != null) {
             // Create a highlight background
             int highlightColor = ContextCompat.getColor(this, R.color.orange);

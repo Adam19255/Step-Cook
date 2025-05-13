@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -20,6 +21,7 @@ public class EditProfileDialog {
 
     private Context context;
     private AlertDialog dialog;
+    private ImageView closeButton;
     private EditText userNameField;
     private EditText currentPasswordField;
     private EditText newPasswordField;
@@ -46,6 +48,7 @@ public class EditProfileDialog {
         builder.setView(dialogView);
 
         // Get references to views
+        closeButton = dialogView.findViewById(R.id.closeButton);
         userNameField = dialogView.findViewById(R.id.userName);
         currentPasswordField = dialogView.findViewById(R.id.currentPassword);
         newPasswordField = dialogView.findViewById(R.id.newPassword);
@@ -58,6 +61,7 @@ public class EditProfileDialog {
 
         // Set click listeners
         saveButton.setOnClickListener(v -> saveChanges());
+        closeButton.setOnClickListener(v -> dialog.dismiss());
         cancelButton.setOnClickListener(v -> dialog.dismiss());
 
         // Create and show the dialog

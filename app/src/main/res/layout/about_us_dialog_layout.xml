@@ -6,11 +6,24 @@
     android:padding="24dp"
     android:background="@drawable/about_dialog_background">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="82dp"
-        android:contentDescription="@string/logo"
-        android:src="@drawable/about_us_logo" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/about_us_logo" />
+
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/close_svg"
+            android:contentDescription="@string/close_button"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="80dp"
