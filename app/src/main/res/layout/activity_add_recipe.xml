@@ -38,34 +38,54 @@
     </LinearLayout>
 
 
-    <!-- + Button to add a new step -->
+    <!-- Scrollable container for steps -->
 
-    <EditText
-        android:id="@+id/recipeTitle"
+    <!-- + Button to add a new step -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/custom_input"
-        android:hint="Enter Recipe Title"
-        android:inputType="text"
-        android:padding="12dp"
-        android:textColor="@color/black"
+        android:layout_marginBottom="531dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_recipe_title" />
+        app:layout_constraintTop_toBottomOf="@+id/add_recipe_title"
+        app:layout_constraintVertical_bias="0.0">
 
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="5dp"
+            android:contentDescription="@string/image_placeholder"
+            android:src="@drawable/image_placeholder" />
 
-    <!-- Scrollable container for steps -->
+        <EditText
+            android:id="@+id/recipeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/custom_input"
+            android:hint="@string/recipe_title"
+            android:inputType="text"
+            android:padding="12dp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeTitle">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:id="@+id/stepsContainer"
@@ -74,7 +94,6 @@
             android:orientation="vertical" />
     </ScrollView>
 
-    <!-- + Button to add a new step -->
     <ImageView
         android:id="@+id/addStepButton"
         android:layout_width="36dp"
@@ -91,7 +110,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/orange"
         android:text="Save Recipe"
         app:layout_constraintEnd_toEndOf="parent"

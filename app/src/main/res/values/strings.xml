@@ -55,7 +55,13 @@
     <string name="search">Search</string>
     <string name="hide">Hide button</string>
     <string name="timer_icon">Set Timer</string>
+    <string name="recipe_title">Recipe Title</string>
+    <string name="image_placeholder">Image Placeholder</string>
     <string name="remove_step">Remove Step</string>
     <string name="save_recipe">Save Recipe</string>
     <string name="close_button">Close Button</string>
+    <string name="set_timer">Set Timer</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="set">Set</string>
 </resources>

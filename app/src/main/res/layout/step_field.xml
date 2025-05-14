@@ -18,7 +18,7 @@
 
     <EditText
         android:id="@+id/stepDetail"
-        android:layout_width="315dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/step_description"
         android:inputType="textCapSentences"
