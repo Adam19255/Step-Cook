@@ -57,6 +57,11 @@
     <string name="timer_icon">Set Timer</string>
     <string name="recipe_title">Recipe Title</string>
     <string name="image_placeholder">Image Placeholder</string>
+    <string name="image_source">Choose Image Source</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
     <string name="remove_step">Remove Step</string>
     <string name="save_recipe">Save Recipe</string>
     <string name="close_button">Close Button</string>

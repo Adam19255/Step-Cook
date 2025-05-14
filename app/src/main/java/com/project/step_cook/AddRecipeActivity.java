@@ -1,34 +1,84 @@
 package com.project.step_cook;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.core.content.FileProvider;
+import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.os.Environment;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import android.Manifest;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddRecipeActivity extends AppCompatActivity implements TimerDialog.OnTimeSetListener {
 
     private ImageView backButton;
     private LinearLayout stepsContainer;
     private LayoutInflater inflater;
+    private ImageButton recipeImageButton;
+    private Button saveRecipeButton;
+    private EditText recipeTitleEditText;
+    private Uri selectedImageUri;
+    private RecipeManager recipeManager;
+    private static final int STORAGE_PERMISSION_CODE = 101;
+    private static final int CAMERA_PERMISSION_CODE = 102;
+    private Uri photoURI;
+    private String currentPhotoPath;
 
+    private final ActivityResultLauncher<Intent> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    selectedImageUri = result.getData().getData();
+                    if (selectedImageUri != null) {
+                        recipeImageButton.setImageURI(selectedImageUri);
+                        // Change scaleType to show the selected image properly
+                        recipeImageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    }
+                }
+            });
+
+    // Activity result launcher for image picking
+    private final ActivityResultLauncher<Intent> takePictureLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK) {
+                            selectedImageUri = photoURI;
+                            if (selectedImageUri != null) {
+                                recipeImageButton.setImageURI(selectedImageUri);
+                                recipeImageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            }
+                        }
+                    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,20 +88,273 @@ public class AddRecipeActivity extends AppCompatActivity implements TimerDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
 
+        recipeManager = RecipeManager.getInstance();
+
         inflater = LayoutInflater.from(this);
 
         backButton = findViewById(R.id.backButton);
         stepsContainer = findViewById(R.id.stepsContainer);
         ImageView addStepButton = findViewById(R.id.addStepButton);
+        recipeImageButton = findViewById(R.id.recipeImageButton);
+        recipeImageButton.setAdjustViewBounds(true);
+        recipeImageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        recipeImageButton.setBackgroundResource(R.drawable.rounded_image_background);
+        saveRecipeButton = findViewById(R.id.saveRecipeButton);
+        recipeTitleEditText = findViewById(R.id.recipeTitle);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        backButton.setOnClickListener(view -> finish());
 
         addStepButton.setOnClickListener(view -> addNewStep());
+
+        // Set click listener for recipe image button
+        recipeImageButton.setOnClickListener(view -> openImagePicker());
+
+        // Set click listener for save button
+        saveRecipeButton.setOnClickListener(view -> saveRecipe());
+
+        // Add a first step by default
+        addNewStep();
+    }
+
+    private void openImagePicker() {
+        Dialog imageSourceDialog = new Dialog(this);
+        imageSourceDialog.setContentView(R.layout.dialog_image_source);
+        imageSourceDialog.setCancelable(true);
+
+        // Set up button for Gallery option
+        LinearLayout galleryOption = imageSourceDialog.findViewById(R.id.galleryOption);
+        galleryOption.setOnClickListener(v -> {
+            checkStoragePermissionAndPickImage();
+            imageSourceDialog.dismiss();
+        });
+
+        // Set up button for Camera option
+        LinearLayout cameraOption = imageSourceDialog.findViewById(R.id.cameraOption);
+        cameraOption.setOnClickListener(v -> {
+            checkCameraPermissionAndTakePicture();
+            imageSourceDialog.dismiss();
+        });
+
+        imageSourceDialog.show();
+    }
+
+    private void checkStoragePermissionAndPickImage() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    STORAGE_PERMISSION_CODE);
+        } else {
+            // Launch gallery
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageLauncher.launch(intent);
+        }
+    }
+
+    private void checkCameraPermissionAndTakePicture() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_CODE);
+        } else {
+            dispatchTakePictureIntent();
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Toast.makeText(this, "Error creating image file", Toast.LENGTH_SHORT).show();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                photoURI = FileProvider.getUriForFile(this,
+                        "com.project.step_cook.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureLauncher.launch(takePictureIntent);
+            }
+        } else {
+            Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION_CODE && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageLauncher.launch(intent);
+        } else if (requestCode == CAMERA_PERMISSION_CODE && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            dispatchTakePictureIntent();
+        } else {
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Save the recipe to Firebase
+    private void saveRecipe() {
+        String title = recipeTitleEditText.getText().toString().trim();
+
+        // Validation
+        if (title.isEmpty()) {
+            recipeTitleEditText.setError("Please enter a recipe title");
+            recipeTitleEditText.requestFocus();
+            return;
+        }
+
+        // Check if we have at least one step
+        if (getStepCount() == 0) {
+            Toast.makeText(this, "Please add at least one step", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Show loading indicator
+        Toast.makeText(this, "Saving recipe...", Toast.LENGTH_SHORT).show();
+        saveRecipeButton.setEnabled(false);
+
+        // If no image is selected, create recipe without image
+        if (selectedImageUri == null) {
+            createRecipeInFirebase(title, "");
+            return;
+        }
+
+        // Upload image first, then create recipe
+        recipeManager.uploadRecipeImage(selectedImageUri, this, new RecipeManager.ImageUploadCallback() {
+            @Override
+            public void onSuccess(String imageUrl) {
+                createRecipeInFirebase(title, imageUrl);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Toast.makeText(AddRecipeActivity.this,
+                        "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                saveRecipeButton.setEnabled(true);
+            }
+        });
+    }
+
+    // Create recipe in Firebase after image upload (if any)
+    private void createRecipeInFirebase(String title, String imageUrl) {
+        // Calculate total cook time by adding up all step timers
+        int totalCookTimeSeconds = calculateTotalCookTime();
+
+        // Collect all steps
+        List<RecipeManager.RecipeStep> steps = collectSteps();
+
+        // Save recipe to Firebase
+        recipeManager.saveRecipe(title, totalCookTimeSeconds, imageUrl, steps,
+                new RecipeManager.RecipeOperationCallback() {
+                    @Override
+                    public void onSuccess(String recipeId) {
+                        Toast.makeText(AddRecipeActivity.this,
+                                "Recipe saved successfully!", Toast.LENGTH_SHORT).show();
+                        // Redirect to recipe list or detail
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Toast.makeText(AddRecipeActivity.this,
+                                "Failed to save recipe: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        saveRecipeButton.setEnabled(true);
+                    }
+                });
+    }
+
+    // Calculate total cook time from all steps with timers
+    private int calculateTotalCookTime() {
+        int totalMinutes = 0;
+
+        for (int i = 0; i < stepsContainer.getChildCount(); i++) {
+            View stepView = stepsContainer.getChildAt(i);
+
+            // Look for timer icon - it might be directly in the step view or in a container
+            ImageView timerIcon = findTimerIconInStepView(stepView);
+
+            if (timerIcon != null && timerIcon.getTag() != null) {
+                try {
+                    Integer minutes = (Integer) timerIcon.getTag();
+                    totalMinutes += minutes;
+                } catch (ClassCastException e) {
+                    // Handle case where tag is not an Integer
+                }
+            }
+        }
+
+        // Return total time in seconds
+        return totalMinutes * 60;
+    }
+
+    // Helper to find timer icon in a step view
+    private ImageView findTimerIconInStepView(View stepView) {
+        // First try to find directly
+        ImageView timerIcon = stepView.findViewById(R.id.timerIcon);
+
+        // If found within a container, return it
+        return timerIcon;
+    }
+
+    // Collect all steps from the UI
+    private List<RecipeManager.RecipeStep> collectSteps() {
+        List<RecipeManager.RecipeStep> steps = new ArrayList<>();
+
+        for (int i = 0; i < stepsContainer.getChildCount(); i++) {
+            View stepView = stepsContainer.getChildAt(i);
+
+            // Get step description
+            EditText stepDetail = stepView.findViewById(R.id.stepDetail);
+            String description = stepDetail.getText().toString().trim();
+
+            // Skip empty steps
+            if (description.isEmpty()) {
+                continue;
+            }
+
+            // Get timer value (if any)
+            int timerMinutes = 0;
+            ImageView timerIcon = findTimerIconInStepView(stepView);
+            if (timerIcon != null && timerIcon.getTag() != null) {
+                try {
+                    timerMinutes = (Integer) timerIcon.getTag();
+                } catch (ClassCastException e) {
+                    // Handle case where tag is not an Integer
+                }
+            }
+
+            // Create step object (using empty ID as it will be assigned by Firestore)
+            steps.add(new RecipeManager.RecipeStep("", description, timerMinutes, i + 1));
+        }
+
+        return steps;
     }
 
     // This method is triggered by the XML android:onClick="clickTimer"
@@ -71,9 +374,9 @@ public class AddRecipeActivity extends AppCompatActivity implements TimerDialog.
         if (parent.getTag() != null && "timerContainer".equals(parent.getTag())) {
             // If it's in a container, get the container's parent which is the step view
             return (View) parent.getParent();
-        } else if (parent instanceof FrameLayout) {
-            // If it's in a FrameLayout (from the XML layout), get the FrameLayout's parent
-            return (View) parent.getParent();
+        } else if (parent instanceof LinearLayout) {
+            // If it's in a LinearLayout (from the XML layout), get the LinearLayout's parent
+            return (View) parent;
         }
 
         // Fallback: look for the step view by tag prefix

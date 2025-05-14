@@ -55,12 +55,14 @@
         app:layout_constraintTop_toBottomOf="@+id/add_recipe_title"
         app:layout_constraintVertical_bias="0.0">
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/recipeImageButton"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="5dp"
             android:contentDescription="@string/image_placeholder"
-            android:src="@drawable/image_placeholder" />
+            android:src="@drawable/image_placeholder"
+            android:scaleType="fitCenter"/>
 
         <EditText
             android:id="@+id/recipeTitle"
@@ -76,16 +78,13 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <LinearLayout
             android:id="@+id/stepsContainer"
@@ -94,27 +93,34 @@
             android:orientation="vertical" />
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/addStepButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_margin="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/add_circle_svg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="16dp"
-        android:layout_marginTop="320dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/orange"
-        android:text="Save Recipe"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addStepButton" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/addStepButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/add_recipe"
+            android:src="@drawable/add_circle_svg" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/saveRecipeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange"
+            android:text="@string/save_recipe" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
