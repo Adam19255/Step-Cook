@@ -50,16 +50,42 @@
             android:src="@drawable/image_placeholder"
             android:scaleType="fitCenter"/>
 
-        <EditText
-            android:id="@+id/recipeTitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/custom_input"
-            android:hint="@string/recipe_title"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textColor="@color/black" />
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/recipeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/custom_input"
+                android:hint="@string/recipe_title"
+                android:inputType="text"
+                android:padding="12dp"
+                android:textColor="@color/black" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/difficultySelect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:padding="12dp"
+                    android:layout_weight="1"
+                    android:hint="@string/select_recipe_difficulty"
+                    android:inputType="none"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <ScrollView

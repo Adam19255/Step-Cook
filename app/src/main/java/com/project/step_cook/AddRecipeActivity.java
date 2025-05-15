@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -25,6 +27,8 @@ public class AddRecipeActivity extends AppCompatActivity implements TimerDialog.
     private Button saveRecipeButton;
     private EditText recipeTitleEditText;
     private TextView cookTimeText;
+    private AutoCompleteTextView difficultySelect;
+    private String selectedDifficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +59,43 @@ public class AddRecipeActivity extends AppCompatActivity implements TimerDialog.
 
         saveRecipeButton.setOnClickListener(view -> saveRecipe());
 
+        difficultySelect = findViewById(R.id.difficultySelect);
+        String[] difficulties = getResources().getStringArray(R.array.difficulties);
+
+        // Create an adapter with the predefined dropdown layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                R.layout.dropdown_item,
+                difficulties
+        );
+
+        // Set the adapter to the AutoCompleteTextView
+        difficultySelect.setAdapter(adapter);
+
+        difficultySelect.setOnItemClickListener((parent, view, position, id) -> {
+            selectedDifficulty = difficulties[position];
+            difficultySelect.setError(null);
+        });
+
+        difficultySelect.setOnClickListener(v -> difficultySelect.setError(null));
+
         // Add a first step by default
         addNewStep();
     }
 
     private void saveRecipe(){
         String title = recipeTitleEditText.getText().toString().trim();
+        String selectedDifficulty = difficultySelect.getText().toString().trim();
 
-        // Validation
         if (title.isEmpty()) {
             recipeTitleEditText.setError("Please enter a recipe title");
             recipeTitleEditText.requestFocus();
+            return;
+        }
+
+        if (selectedDifficulty.isEmpty()) {
+            difficultySelect.setError("Please select a difficulty level");
+            difficultySelect.requestFocus();
             return;
         }
 
