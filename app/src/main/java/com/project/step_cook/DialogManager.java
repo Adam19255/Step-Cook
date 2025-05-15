@@ -21,11 +21,13 @@ public class DialogManager {
         dialog.show();
     }
 
-    /**
-     * Show the About dialog
-     */
     public void showAboutDialog() {
         AboutUsDialog dialog = new AboutUsDialog(context);
+        dialog.show();
+    }
+
+    public void showImageSourceDialog(){
+        ImageSourceDialog dialog = new ImageSourceDialog(context);
         dialog.show();
     }
 

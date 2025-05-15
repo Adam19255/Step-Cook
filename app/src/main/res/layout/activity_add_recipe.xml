@@ -39,6 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginTop="3dp"
         android:orientation="horizontal">
 
         <ImageButton
@@ -60,11 +61,12 @@
                 android:id="@+id/recipeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/custom_input"
                 android:hint="@string/recipe_title"
                 android:inputType="text"
-                android:padding="12dp"
+                android:padding="10dp"
                 android:textColor="@color/black" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -76,8 +78,10 @@
                     android:id="@+id/difficultySelect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:padding="12dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="10dp"
                     android:layout_weight="1"
                     android:hint="@string/select_recipe_difficulty"
                     android:inputType="none"/>

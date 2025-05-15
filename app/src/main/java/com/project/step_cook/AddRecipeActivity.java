@@ -30,6 +30,8 @@ public class AddRecipeActivity extends AppCompatActivity implements TimerDialog.
     private AutoCompleteTextView difficultySelect;
     private String selectedDifficulty;
 
+    private DialogManager dialogManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Force Light Mode
@@ -51,11 +53,13 @@ public class AddRecipeActivity extends AppCompatActivity implements TimerDialog.
         recipeTitleEditText = findViewById(R.id.recipeTitle);
         cookTimeText = findViewById(R.id.cookTime);
 
+        dialogManager = new DialogManager(this);
+
         backButton.setOnClickListener(view -> finish());
 
         addStepButton.setOnClickListener(view -> addNewStep());
 
-        recipeImageButton.setOnClickListener(view -> Toast.makeText(AddRecipeActivity.this, "Image Button pressed", Toast.LENGTH_SHORT).show());
+        recipeImageButton.setOnClickListener(v -> dialogManager.showImageSourceDialog());
 
         saveRecipeButton.setOnClickListener(view -> saveRecipe());
 
@@ -85,7 +89,7 @@ public class AddRecipeActivity extends AppCompatActivity implements TimerDialog.
 
     private void saveRecipe(){
         String title = recipeTitleEditText.getText().toString().trim();
-        String selectedDifficulty = difficultySelect.getText().toString().trim();
+        selectedDifficulty = difficultySelect.getText().toString().trim();
 
         if (title.isEmpty()) {
             recipeTitleEditText.setError("Please enter a recipe title");
