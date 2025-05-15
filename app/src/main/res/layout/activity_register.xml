@@ -38,7 +38,7 @@
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp"
-        android:background="@drawable/custom_login_container">
+        android:background="@drawable/custom_input">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,55 +62,52 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/custom_login_container"
+                android:background="@drawable/custom_input"
                 android:drawableStart="@drawable/user_svg"
                 android:drawablePadding="8dp"
                 android:hint="@string/username_hint"
+                android:inputType="text"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="@color/black" />
 
             <EditText
                 android:id="@+id/userEmail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/custom_login_container"
+                android:background="@drawable/custom_input"
                 android:drawableStart="@drawable/email_svg"
                 android:drawablePadding="8dp"
                 android:hint="@string/email_hint"
                 android:inputType="textEmailAddress"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="@color/black" />
 
             <EditText
                 android:id="@+id/userPassword"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/custom_login_container"
+                android:background="@drawable/custom_input"
                 android:drawableStart="@drawable/lock_svg"
                 android:drawablePadding="8dp"
                 android:hint="@string/password_hint"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="@color/black" />
 
             <EditText
                 android:id="@+id/confirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/custom_login_container"
+                android:background="@drawable/custom_input"
                 android:drawableStart="@drawable/lock_svg"
                 android:drawablePadding="8dp"
                 android:hint="@string/confirm_password_hint"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="@color/black" />
 
 
             <Button

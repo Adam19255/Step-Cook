@@ -2,8 +2,6 @@ package com.project.step_cook;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,14 +9,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -48,43 +38,58 @@ public class RegisterActivity extends AppCompatActivity {
 
         userManager = UserManager.getInstance();
 
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String txt_user = userName.getText().toString();
-                String txt_email = userEmail.getText().toString();
-                String txt_pass = userPassword.getText().toString();
-                String txt_confirm_pass = confirmPassword.getText().toString();
+        signupButton.setOnClickListener(v -> validate());
 
-                if (TextUtils.isEmpty(txt_user) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_pass) || TextUtils.isEmpty(txt_confirm_pass)){
-                    Toast.makeText(RegisterActivity.this, "Missing Fields.", Toast.LENGTH_LONG).show();
-                } else if (txt_pass.length() < 6) {
-                    Toast.makeText(RegisterActivity.this, "Password is to short.", Toast.LENGTH_LONG).show();
-                } else if (!txt_pass.equals(txt_confirm_pass)) {
-                    Toast.makeText(RegisterActivity.this, "Passwords don't match.", Toast.LENGTH_LONG).show();
-                } else {
-                    userManager.registerUser(txt_user, txt_email, txt_pass, new UserManager.UserOperationCallback() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(RegisterActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                            finish();
-                        }
+        backButton.setOnClickListener(v -> finish());
+    }
 
-                        @Override
-                        public void onError(Exception e) {
-                            Toast.makeText(RegisterActivity.this, "Registration failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
+    private void validate(){
+        String txt_user = userName.getText().toString();
+        String txt_email = userEmail.getText().toString();
+        String txt_pass = userPassword.getText().toString();
+        String txt_confirm_pass = confirmPassword.getText().toString();
+
+        if (txt_user.isEmpty()) {
+            userName.setError("Please enter a name");
+            userName.requestFocus();
+            return;
+        }
+        if (txt_email.isEmpty()) {
+            userEmail.setError("Please enter an email");
+            userEmail.requestFocus();
+            return;
+        }
+        if (txt_pass.isEmpty()) {
+            userPassword.setError("Please enter a password");
+            userPassword.requestFocus();
+            return;
+        }
+        if (txt_confirm_pass.isEmpty()) {
+            confirmPassword.setError("Please confirm password");
+            confirmPassword.requestFocus();
+        }
+        else if (txt_pass.length() < 6) {
+            userPassword.setError("Password is too short, minimum 6 chars");
+            userPassword.requestFocus();
+        }
+        else if (!txt_pass.equals(txt_confirm_pass)) {
+            confirmPassword.setError("Passwords don't match");
+            confirmPassword.requestFocus();
+        }
+        else {
+            userManager.registerUser(txt_user, txt_email, txt_pass, new UserManager.UserOperationCallback() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(RegisterActivity.this, "Registered successfully!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    finish();
                 }
-            }
-        });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+                @Override
+                public void onError(Exception e) {
+                    Toast.makeText(RegisterActivity.this, "Registration failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }

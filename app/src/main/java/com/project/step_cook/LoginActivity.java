@@ -2,7 +2,6 @@ package com.project.step_cook;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -10,10 +9,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,38 +39,42 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = userEmail.getText().toString();
-                String password = userPass.getText().toString();
+        loginButton.setOnClickListener(v -> validate());
 
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Email and Password required.", Toast.LENGTH_SHORT).show();
-                    return;
+        signupRedirect.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+    }
+
+    private void validate(){
+        String email = userEmail.getText().toString();
+        String password = userPass.getText().toString();
+
+        if (email.isEmpty()) {
+            userEmail.setError("Please enter an email");
+            userEmail.requestFocus();
+            return;
+        }
+        if (password.isEmpty()) {
+            userPass.setError("Please enter a password");
+            userPass.requestFocus();
+        }
+        else if (password.length() < 6) {
+            userPass.setError("Password is too short, minimum 6 chars");
+            userPass.requestFocus();
+        }
+        else{
+            userManager.loginUser(email, password, new UserManager.UserDataCallback() {
+                @Override
+                public void onUserDataLoaded(User user) {
+                    Toast.makeText(LoginActivity.this, "Welcome " + user.getUserName() + "!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 }
 
-                userManager.loginUser(email, password, new UserManager.UserDataCallback() {
-                    @Override
-                    public void onUserDataLoaded(User user) {
-                        Toast.makeText(LoginActivity.this, "Welcome " + user.getUserName() + "!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Toast.makeText(LoginActivity.this, "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-
-        signupRedirect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
-        });
+                @Override
+                public void onError(Exception e) {
+                    Toast.makeText(LoginActivity.this, "Login failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }
