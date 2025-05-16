@@ -19,12 +19,14 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private Button difficultyFilter;
     private Button favoriteFilter;
     private Button cookTimeFilter;
+    private Button myRecipesFilter;
     private ImageView addRecipeButton;
 
     // Filter managers
     private FilterManager difficultyFilterManager;
     private FilterManager cookTimeFilterManager;
     private FavoriteFilterManager favoriteFilterManager;
+    private MyRecipesFilterManager myRecipesFilterManager;
 
     // UI utils
     private DialogManager dialogManager;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         difficultyFilter = findViewById(R.id.difficultyFilter);
         favoriteFilter = findViewById(R.id.favoriteFilter);
         cookTimeFilter = findViewById(R.id.cookTimeFilter);
+        myRecipesFilter = findViewById(R.id.myRecipesFilter);
         addRecipeButton = findViewById(R.id.addRecipeButton);
 
         searchInput.clearFocus();
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         difficultyFilterManager = new DifficultyFilterManager(this, difficultyFilter);
         cookTimeFilterManager = new CookTimeFilterManager(this, cookTimeFilter);
         favoriteFilterManager = new FavoriteFilterManager(this, favoriteFilter);
+        myRecipesFilterManager = new MyRecipesFilterManager(this, myRecipesFilter);
     }
 
     private void setupClickListeners() {
@@ -74,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         favoriteFilter.setOnClickListener(v -> favoriteFilterManager.toggleFilter());
 
         cookTimeFilter.setOnClickListener(v -> cookTimeFilterManager.showFilterDialog());
+
+        myRecipesFilter.setOnClickListener(v -> myRecipesFilterManager.toggleFilter());
     }
 
     private void showPopupMenu(View view) {

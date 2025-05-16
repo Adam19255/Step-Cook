@@ -52,6 +52,7 @@
     <string name="fast_cook_time">Less than 30 minutes</string>
     <string name="medium_cook_time">30 – 60 minutes</string>
     <string name="long_cook_time">More than 60 minutes</string>
+    <string name="my_recipes_filter">My Recipes</string>
     <string name="search">Search</string>
     <string name="hide">Hide button</string>
     <string name="timer_icon">Set Timer</string>
@@ -70,6 +71,8 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="delete">Delete</string>
+    <string name="delete_image">Delete Uploaded Image</string>
     <string name="remove_step">Remove Step</string>
     <string name="save_recipe">Save Recipe</string>
     <string name="close_button">Close Button</string>
@@ -77,5 +80,5 @@
     <string name="hours">Hours</string>
     <string name="minutes">Minutes</string>
     <string name="set">Set</string>
-    <string name="cook_time">Total Cook Time: </string>
+    <string name="cook_time_format">Cook time: %1$s</string>
 </resources>

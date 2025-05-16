@@ -12,6 +12,10 @@ public class ImageSourceDialog extends Dialog {
     private Context context;
     private LinearLayout cameraOption;
     private LinearLayout galleryOption;
+    private LinearLayout deleteImageOption;
+    private View.OnClickListener cameraClickListener;
+    private View.OnClickListener galleryClickListener;
+    private View.OnClickListener deleteImageClickListener;
 
     public ImageSourceDialog(Context context) {
         super(context);
@@ -32,22 +36,70 @@ public class ImageSourceDialog extends Dialog {
         // Initialize views
         cameraOption = findViewById(R.id.cameraOption);
         galleryOption = findViewById(R.id.galleryOption);
+        deleteImageOption = findViewById(R.id.deleteUploadedImage);
 
         // Set click listeners
-        cameraOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Camera option selected", Toast.LENGTH_SHORT).show();
-                dismiss();
-            }
-        });
+        if (cameraClickListener != null) {
+            cameraOption.setOnClickListener(cameraClickListener);
+        } else {
+            cameraOption.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Camera option selected", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            });
+        }
 
-        galleryOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Gallery option selected", Toast.LENGTH_SHORT).show();
-                dismiss();
-            }
-        });
+        if (galleryClickListener != null) {
+            galleryOption.setOnClickListener(galleryClickListener);
+        } else {
+            galleryOption.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Gallery option selected", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            });
+        }
+
+        if (deleteImageClickListener != null) {
+            deleteImageOption.setOnClickListener(deleteImageClickListener);
+        } else {
+            deleteImageOption.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Delete image option selected", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            });
+        }
+    }
+
+    public void setCameraClickListener(View.OnClickListener listener) {
+        this.cameraClickListener = listener;
+
+        // If the dialog is already showing, update the listener
+        if (cameraOption != null) {
+            cameraOption.setOnClickListener(listener);
+        }
+    }
+
+    public void setGalleryClickListener(View.OnClickListener listener) {
+        this.galleryClickListener = listener;
+
+        // If the dialog is already showing, update the listener
+        if (galleryOption != null) {
+            galleryOption.setOnClickListener(listener);
+        }
+    }
+
+    public void setDeleteImageClickListener(View.OnClickListener listener) {
+        this.deleteImageClickListener = listener;
+
+        // If the dialog is already showing, update the listener
+        if (deleteImageOption != null) {
+            deleteImageOption.setOnClickListener(listener);
+        }
     }
 }

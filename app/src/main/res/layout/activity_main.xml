@@ -1,4 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -10,134 +10,122 @@
     android:layoutDirection="ltr"
     android:textDirection="ltr"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- Settings Icon - Top Right -->
-
-    <ImageView
-        android:id="@+id/appLogo"
-        android:layout_width="160dp"
-        android:layout_height="107dp"
-        android:contentDescription="@string/logo"
-        android:src="@drawable/app_logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.005" />
-
-    <EditText
-        android:id="@+id/searchInput"
-        android:layout_width="370dp"
-        android:layout_height="48dp"
-        android:background="@drawable/custom_input"
-        android:drawableStart="@drawable/custom_search_icon"
-        android:drawablePadding="8dp"
-        android:hint="@string/search"
-        android:inputType="textEmailAddress"
-        android:padding="8dp"
-        android:textColor="@color/black"
-        android:textColorHighlight="@color/cardview_dark_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appLogo"
-        app:layout_constraintVertical_bias="0.015" />
-
-    <!-- Filters -->
-
-    <!-- Add button -->
-
-    <ImageView
-        android:id="@+id/popupMenuButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/popup"
-        android:src="@drawable/dots_svg"
-        app:layout_constraintBottom_toTopOf="@+id/searchInput"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toEndOf="@+id/appLogo"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/difficultyFilter"
-        android:layout_width="115dp"
-        android:layout_height="48dp"
-        android:backgroundTint="@color/gray"
-        android:text="@string/difficulty_filter"
-        android:textColor="@color/black"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/favoriteFilter"
-        app:layout_constraintHorizontal_bias="0.60"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchInput"
-        app:layout_constraintVertical_bias="0.02" />
-
-    <Button
-        android:id="@+id/favoriteFilter"
-        android:layout_width="115dp"
-        android:layout_height="48dp"
-        android:backgroundTint="@color/gray"
-        android:text="@string/favorite_filter"
-        android:textColor="@color/black"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cookTimeFilter"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchInput"
-        app:layout_constraintVertical_bias="0.02" />
-
-    <Button
-        android:id="@+id/cookTimeFilter"
-        android:layout_width="115dp"
-        android:layout_height="48dp"
-        android:backgroundTint="@color/gray"
-        android:text="@string/cook_time_filter"
-        android:textColor="@color/black"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchInput"
-        app:layout_constraintVertical_bias="0.02" />
-
-    <FrameLayout
-        android:id="@+id/addButtonContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
 
         <ImageView
-            android:id="@+id/addRecipeButton"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:contentDescription="@string/add_recipe"
-            android:src="@drawable/add_circle_svg" />
-    </FrameLayout>
+            android:id="@+id/appLogo"
+            android:layout_width="160dp"
+            android:layout_height="107dp"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/app_logo" />
 
-    <!-- Recipe List -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-    <!-- Top Guide -->
+        <ImageView
+            android:id="@+id/popupMenuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/popup"
+            android:src="@drawable/dots_svg" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
+
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="370dp"
+            android:layout_height="48dp"
+            android:background="@drawable/custom_input"
+            android:drawableStart="@drawable/custom_search_icon"
+            android:drawablePadding="8dp"
+            android:hint="@string/search"
+            android:inputType="textEmailAddress"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textColorHighlight="@color/cardview_dark_background" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <Button
+                    android:id="@+id/difficultyFilter"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/gray"
+                    android:text="@string/difficulty_filter"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="4dp"/>
+
+                <Button
+                    android:id="@+id/favoriteFilter"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/gray"
+                    android:text="@string/favorite_filter"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="4dp"/>
+
+                <Button
+                    android:id="@+id/cookTimeFilter"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/gray"
+                    android:text="@string/cook_time_filter"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="4dp"/>
+
+                <Button
+                    android:id="@+id/myRecipesFilter"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/gray"
+                    android:text="@string/my_recipes_filter"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipeRecyclerView"
-        android:layout_width="350dp"
-        android:layout_height="400dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favoriteFilter"
-        app:layout_constraintVertical_bias="0.123" />
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -146,4 +134,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/addRecipeButton"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:contentDescription="@string/add_recipe"
+        android:layout_gravity="end"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/add_circle_svg" />
+
+</LinearLayout>
