@@ -8,7 +8,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.TextView;
+
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 
 public class TimerDialog extends Dialog {
     private Context context;
@@ -35,6 +37,11 @@ public class TimerDialog extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_timer);
+
+        // Make the dialog window background transparent
+        if (getWindow() != null) {
+            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
 
         // Set up the hour picker (0-23 hours)
         hourPicker = findViewById(R.id.hourPicker);
@@ -69,9 +76,6 @@ public class TimerDialog extends Dialog {
             minutePicker.setValue(0);
         }
 
-        TextView hourLabel = findViewById(R.id.hourLabel);
-        TextView minuteLabel = findViewById(R.id.minuteLabel);
-
         setButton = findViewById(R.id.setTimerButton);
         cancelButton = findViewById(R.id.cancelTimerButton);
 
@@ -87,11 +91,6 @@ public class TimerDialog extends Dialog {
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(v -> dismiss());
     }
 }
