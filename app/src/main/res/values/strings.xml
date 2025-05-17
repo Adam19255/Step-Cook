@@ -81,4 +81,5 @@
     <string name="minutes">Minutes</string>
     <string name="set">Set</string>
     <string name="cook_time_format">Cook time: %1$s</string>
+    <string name="recipe_time_difficulty">%1$s | %2$s</string>
 </resources>
