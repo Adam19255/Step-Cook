@@ -8,11 +8,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, RecipeAdapter.OnRecipeClickListener  {
 
     private ImageView popupMenuButton;
     private EditText searchInput;
@@ -21,6 +26,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private Button cookTimeFilter;
     private Button myRecipesFilter;
     private ImageView addRecipeButton;
+    private RecyclerView recipeRecyclerView;
+
+    // Adapter for recipes
+    private RecipeAdapter recipeAdapter;
 
     // Filter managers
     private FilterManager difficultyFilterManager;
@@ -32,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private DialogManager dialogManager;
     private UIHelper uiHelper;
 
+    // Recipe manager
+    private RecipeManager recipeManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Force Light Mode
@@ -42,7 +54,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         initializeViews();
         initializeManagers();
+        setupRecyclerView();
         setupClickListeners();
+        loadRecipes();
     }
 
     private void initializeViews() {
@@ -53,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         cookTimeFilter = findViewById(R.id.cookTimeFilter);
         myRecipesFilter = findViewById(R.id.myRecipesFilter);
         addRecipeButton = findViewById(R.id.addRecipeButton);
+        recipeRecyclerView = findViewById(R.id.recipeRecyclerView);
 
         searchInput.clearFocus();
     }
@@ -60,11 +75,19 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private void initializeManagers() {
         uiHelper = new UIHelper(this);
         dialogManager = new DialogManager(this);
+        recipeManager = RecipeManager.getInstance();
 
         difficultyFilterManager = new DifficultyFilterManager(this, difficultyFilter);
         cookTimeFilterManager = new CookTimeFilterManager(this, cookTimeFilter);
         favoriteFilterManager = new FavoriteFilterManager(this, favoriteFilter);
         myRecipesFilterManager = new MyRecipesFilterManager(this, myRecipesFilter);
+    }
+
+    private void setupRecyclerView() {
+        recipeAdapter = new RecipeAdapter(this);
+        recipeAdapter.setOnRecipeClickListener(this);
+        recipeRecyclerView.setAdapter(recipeAdapter);
+        recipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void setupClickListeners() {
@@ -80,6 +103,32 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         cookTimeFilter.setOnClickListener(v -> cookTimeFilterManager.showFilterDialog());
 
         myRecipesFilter.setOnClickListener(v -> myRecipesFilterManager.toggleFilter());
+    }
+
+    /**
+     * Load recipes from the database
+     */
+    private void loadRecipes() {
+        // Show loading indicator if needed
+
+        // Fetch recipes from RecipeManager
+        recipeManager.getAllRecipes(new RecipeManager.RecipesRetrievalCallback() {
+            @Override
+            public void onRecipesLoaded(List<Recipe> recipes) {
+                // Update the adapter with the loaded recipes
+                recipeAdapter.setRecipes(recipes);
+
+                // Hide loading indicator if it was shown
+            }
+
+            @Override
+            public void onError(Exception e) {
+                // Hide loading indicator if shown
+
+                // Show error message
+                Toast.makeText(MainActivity.this, "Error loading recipes: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showPopupMenu(View view) {
@@ -105,5 +154,27 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
 
         return false;
+    }
+
+    @Override
+    public void onRecipeClick(Recipe recipe) {
+        // Handle recipe click event
+        Intent intent = new Intent(MainActivity.this, RecipeDetailActivity.class);
+        intent.putExtra("RECIPE_ID", recipe.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onFavoriteClick(Recipe recipe, int position) {
+        // Handle favorite button click
+        // This would implement favorite functionality in a future update
+        Toast.makeText(this, "Favorite button clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reload recipes when returning to this activity
+        loadRecipes();
     }
 }

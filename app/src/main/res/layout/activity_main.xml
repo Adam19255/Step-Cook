@@ -50,8 +50,8 @@
 
         <EditText
             android:id="@+id/searchInput"
-            android:layout_width="370dp"
-            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/custom_input"
             android:drawableStart="@drawable/custom_search_icon"
             android:drawablePadding="8dp"
