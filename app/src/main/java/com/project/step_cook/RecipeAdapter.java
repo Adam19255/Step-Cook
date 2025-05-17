@@ -42,7 +42,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.dish_card, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false);
         return new RecipeViewHolder(view);
     }
 
@@ -67,14 +67,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     class RecipeViewHolder extends RecyclerView.ViewHolder {
         private ImageView recipeImage;
         private TextView recipeTitle;
-        private TextView recipeInfo;
         private ImageView favoriteIcon;
+        private TextView recipeCookTime;
+        private TextView recipeDifficulty;
+        private TextView textDivider;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeImage = itemView.findViewById(R.id.recipeImage);
             recipeTitle = itemView.findViewById(R.id.recipeTitle);
-            recipeInfo = itemView.findViewById(R.id.recipeInfo);
+            recipeCookTime = itemView.findViewById(R.id.recipeCookTime);
+            recipeDifficulty = itemView.findViewById(R.id.recipeDifficulty);
+            textDivider = itemView.findViewById(R.id.textDivider);
             favoriteIcon = itemView.findViewById(R.id.favoriteRecipe);
 
             // Set click listener for the whole item
@@ -106,11 +110,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipeTitle.setText(recipe.getTitle());
 
             // Set recipe info (cook time and difficulty)
-            String recipeInfoText = recipe.getFormattedCookTime();
+            String recipeCookTimeText = recipe.getFormattedCookTime();
+            String recipeDifficultyText = "";
+            String recipeTextDivider = " | ";
             if (recipe.getDifficulty() != null && !recipe.getDifficulty().isEmpty()) {
-                recipeInfoText += " | " + recipe.getDifficulty();
+                recipeDifficultyText = recipe.getDifficulty();
             }
-            recipeInfo.setText(recipeInfoText);
+            recipeCookTime.setText(recipeCookTimeText);
+            textDivider.setText(recipeTextDivider);
+            recipeDifficulty.setText(recipeDifficultyText);
 
             // Load recipe image using Glide if available
             if (recipe.getImageUrl() != null && !recipe.getImageUrl().isEmpty()) {

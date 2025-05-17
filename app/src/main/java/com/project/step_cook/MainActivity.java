@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private Button myRecipesFilter;
     private ImageView addRecipeButton;
     private RecyclerView recipeRecyclerView;
+    private FrameLayout loadingLayout;
 
     // Adapter for recipes
     private RecipeAdapter recipeAdapter;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         myRecipesFilter = findViewById(R.id.myRecipesFilter);
         addRecipeButton = findViewById(R.id.addRecipeButton);
         recipeRecyclerView = findViewById(R.id.recipeRecyclerView);
+        loadingLayout = findViewById(R.id.loadingLayout);
 
         searchInput.clearFocus();
     }
@@ -105,11 +108,19 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         myRecipesFilter.setOnClickListener(v -> myRecipesFilterManager.toggleFilter());
     }
 
+    private void showLoading() {
+        loadingLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading() {
+        loadingLayout.setVisibility(View.GONE);
+    }
+
     /**
      * Load recipes from the database
      */
     private void loadRecipes() {
-        // Show loading indicator if needed
+        showLoading();
 
         // Fetch recipes from RecipeManager
         recipeManager.getAllRecipes(new RecipeManager.RecipesRetrievalCallback() {
@@ -117,13 +128,12 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             public void onRecipesLoaded(List<Recipe> recipes) {
                 // Update the adapter with the loaded recipes
                 recipeAdapter.setRecipes(recipes);
-
-                // Hide loading indicator if it was shown
+                hideLoading();
             }
 
             @Override
             public void onError(Exception e) {
-                // Hide loading indicator if shown
+                hideLoading();
 
                 // Show error message
                 Toast.makeText(MainActivity.this, "Error loading recipes: " + e.getMessage(), Toast.LENGTH_SHORT).show();

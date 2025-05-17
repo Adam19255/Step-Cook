@@ -146,7 +146,7 @@
         android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#80000000"
+        android:background="#45EB832B"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone">
@@ -174,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Saving recipe..."
+                    android:text="@string/saving"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -147,6 +147,44 @@
         </LinearLayout>
     </ScrollView>
 
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#45EB832B"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:gravity="center">
+
+                <ProgressBar
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:indeterminateTint="@color/orange" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/loading_recipes"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
     <ImageView
         android:id="@+id/addRecipeButton"
         android:layout_width="75dp"
